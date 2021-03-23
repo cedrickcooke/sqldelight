@@ -12,6 +12,7 @@ import com.squareup.sqldelight.core.SqlDelightCompilationUnitImpl
 import com.squareup.sqldelight.core.SqlDelightDatabaseProperties
 import com.squareup.sqldelight.core.SqlDelightDatabasePropertiesImpl
 import com.squareup.sqldelight.core.SqlDelightSourceFolderImpl
+import com.squareup.sqldelight.core.SqlDelightVisibilitiesImpl
 import com.squareup.sqldelight.core.SqldelightParserUtil
 import com.squareup.sqldelight.core.compiler.SqlDelightCompiler
 import com.squareup.sqldelight.core.lang.SqlDelightFileType
@@ -51,7 +52,8 @@ abstract class SqlDelightProjectTestCase : LightJavaCodeInsightFixtureTestCase()
       outputDirectoryFile = File(tempRoot.path, "build"),
       dependencies = emptyList(),
       dialectPresetName = DialectPreset.SQLITE_3_18.name,
-      rootDirectory = File(tempRoot.path).absoluteFile
+      rootDirectory = File(tempRoot.path).absoluteFile,
+      visibilities = SqlDelightVisibilitiesImpl()
     )
   }
 

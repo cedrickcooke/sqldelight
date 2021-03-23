@@ -6,12 +6,15 @@ import com.alecstrong.sql.psi.core.SqlCoreEnvironment
 import com.intellij.psi.PsiElement
 import com.squareup.sqldelight.core.SqlDelightDatabasePropertiesImpl
 import com.squareup.sqldelight.core.SqlDelightEnvironment
+import com.squareup.sqldelight.core.SqlDelightVisibilities
+import com.squareup.sqldelight.core.SqlDelightVisibilitiesImpl
 import java.io.File
 
 internal class TestEnvironment(
   private val outputDirectory: File = File("output"),
   private val deriveSchemaFromMigrations: Boolean = false,
-  private val dialectPreset: DialectPreset = DialectPreset.SQLITE_3_18
+  private val dialectPreset: DialectPreset = DialectPreset.SQLITE_3_18,
+  private val visibilities: SqlDelightVisibilities = SqlDelightVisibilitiesImpl()
 ) {
   fun build(root: String): SqlCoreEnvironment {
     return build(
@@ -39,7 +42,8 @@ internal class TestEnvironment(
         outputDirectoryFile = outputDirectory,
         dialectPresetName = dialectPreset.name,
         deriveSchemaFromMigrations = deriveSchemaFromMigrations,
-        rootDirectory = File(root)
+        rootDirectory = File(root),
+        visibilities = visibilities
       ),
       verifyMigrations = true,
       // hyphen in the name tests that our module name sanitizing works correctly

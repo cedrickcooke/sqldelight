@@ -32,6 +32,7 @@ interface SqlDelightDatabaseProperties : Serializable {
   val deriveSchemaFromMigrations: Boolean
   val outputDirectoryFile: File
   val rootDirectory: File
+  val visibilities: SqlDelightVisibilities
 }
 
 val SqlDelightDatabaseProperties.dialectPreset: DialectPreset
@@ -58,4 +59,15 @@ interface SqlDelightSourceFolder : Serializable {
 interface SqlDelightDatabaseName : Serializable {
   val packageName: String
   val className: String
+}
+
+interface SqlDelightVisibilities: Serializable {
+  val api: SqlDelightVisibility
+  val impl: SqlDelightVisibility
+  val models: SqlDelightVisibility
+}
+
+enum class SqlDelightVisibility : Serializable {
+  PUBLIC,
+  INTERNAL
 }

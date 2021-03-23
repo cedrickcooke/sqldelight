@@ -2,6 +2,7 @@ package com.squareup.sqldelight.core
 
 import com.alecstrong.sql.psi.core.DialectPreset
 import java.io.File
+import java.io.Serializable
 
 data class SqlDelightPropertiesFileImpl(
   override val databases: List<SqlDelightDatabasePropertiesImpl>
@@ -15,7 +16,8 @@ data class SqlDelightDatabasePropertiesImpl(
   override val dialectPresetName: String = DialectPreset.SQLITE_3_18.name,
   override val deriveSchemaFromMigrations: Boolean = false,
   override val outputDirectoryFile: File,
-  override val rootDirectory: File
+  override val rootDirectory: File,
+  override val visibilities: SqlDelightVisibilities
 ) : SqlDelightDatabaseProperties
 
 data class SqlDelightDatabaseNameImpl(
@@ -32,3 +34,9 @@ data class SqlDelightSourceFolderImpl(
   override val folder: File,
   override val dependency: Boolean = false
 ) : SqlDelightSourceFolder
+
+data class SqlDelightVisibilitiesImpl(
+  override val api: SqlDelightVisibility = SqlDelightVisibility.PUBLIC,
+  override val impl: SqlDelightVisibility = SqlDelightVisibility.PUBLIC,
+  override val models: SqlDelightVisibility = SqlDelightVisibility.PUBLIC
+) : SqlDelightVisibilities

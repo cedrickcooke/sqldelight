@@ -76,7 +76,8 @@ internal fun properties(fixtureRoot: File): SqlDelightPropertiesFileImpl? {
         dialectPresetName = it.dialectPresetName,
         deriveSchemaFromMigrations = it.deriveSchemaFromMigrations,
         outputDirectoryFile = it.outputDirectoryFile,
-        rootDirectory = it.rootDirectory
+        rootDirectory = it.rootDirectory,
+        visibilities = it.visibilities
       )
     }
   )

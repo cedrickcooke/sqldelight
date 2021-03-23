@@ -5,6 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.sqldelight.core.SqlDelightCompilationUnitImpl
 import com.squareup.sqldelight.core.SqlDelightDatabasePropertiesImpl
 import com.squareup.sqldelight.core.SqlDelightSourceFolderImpl
+import com.squareup.sqldelight.core.SqlDelightVisibilitiesImpl
 import com.squareup.sqldelight.withTemporaryFixture
 import org.junit.Test
 import java.io.File
@@ -102,7 +103,8 @@ class CompilationUnitTests {
             ),
             dependencies = emptyList(),
             dialectPresetName = DialectPreset.SQLITE_3_18.name,
-            rootDirectory = fixtureRoot
+            rootDirectory = fixtureRoot,
+            visibilities = SqlDelightVisibilitiesImpl()
           ),
           SqlDelightDatabasePropertiesImpl(
             className = "OtherDb",
@@ -119,7 +121,8 @@ class CompilationUnitTests {
             ),
             dependencies = emptyList(),
             dialectPresetName = DialectPreset.SQLITE_3_18.name,
-            rootDirectory = fixtureRoot
+            rootDirectory = fixtureRoot,
+            visibilities = SqlDelightVisibilitiesImpl()
           )
         )
       }

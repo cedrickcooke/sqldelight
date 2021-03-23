@@ -6,6 +6,8 @@ import com.squareup.sqldelight.core.SqlDelightCompilationUnitImpl
 import com.squareup.sqldelight.core.SqlDelightDatabaseNameImpl
 import com.squareup.sqldelight.core.SqlDelightDatabasePropertiesImpl
 import com.squareup.sqldelight.core.SqlDelightSourceFolderImpl
+import com.squareup.sqldelight.core.SqlDelightVisibilitiesImpl
+import com.squareup.sqldelight.core.SqlDelightVisibility
 import com.squareup.sqldelight.core.lang.MigrationFileType
 import com.squareup.sqldelight.core.lang.SqlDelightFileType
 import com.squareup.sqldelight.gradle.kotlin.Source
@@ -14,6 +16,7 @@ import groovy.lang.GroovyObject
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import java.io.File
+import java.util.Locale
 
 class SqlDelightDatabase(
   val project: Project,
@@ -25,7 +28,10 @@ class SqlDelightDatabase(
   var deriveSchemaFromMigrations: Boolean = false,
   var verifyMigrations: Boolean = false,
   var migrationOutputDirectory: File? = null,
-  var migrationOutputFileFormat: String = ".sql"
+  var migrationOutputFileFormat: String = ".sql",
+  var apiVisibility: String = "public",
+  var implVisibility: String = "public",
+  var modelsVisibility: String = "public"
 ) {
   private val generatedSourcesDirectory
     get() = File(project.buildDir, "$FD_GENERATED/sqldelight/code/$name")
@@ -69,6 +75,12 @@ class SqlDelightDatabase(
     val dialect = dialectMapping[dialect]
       ?: throw GradleException("The dialect $dialect is not supported. Supported dialects: ${dialectMapping.keys.joinToString()}.")
 
+    fun String.toVisibility(): SqlDelightVisibility = when (this) {
+      "public" -> SqlDelightVisibility.PUBLIC
+      "internal" -> SqlDelightVisibility.INTERNAL
+      else -> throw GradleException("The visibility $this is not supported. Supported visibilities: public, internal.")
+    }
+
     try {
       return SqlDelightDatabasePropertiesImpl(
         packageName = packageName,
@@ -83,7 +95,12 @@ class SqlDelightDatabase(
         className = name,
         dependencies = dependencies.map { SqlDelightDatabaseNameImpl(it.packageName!!, it.name) },
         dialectPresetName = dialect.name,
-        deriveSchemaFromMigrations = deriveSchemaFromMigrations
+        deriveSchemaFromMigrations = deriveSchemaFromMigrations,
+        visibilities = SqlDelightVisibilitiesImpl(
+          api = apiVisibility.toVisibility(),
+          impl = implVisibility.toVisibility(),
+          models = modelsVisibility.toVisibility(),
+        )
       )
     } finally {
       recursionGuard = false
